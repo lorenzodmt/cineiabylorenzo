@@ -2,7 +2,8 @@ import streamlit as st
 import google.generativeai as genai
 
 # Configuração da chave (peça para os alunos gerarem no Google AI Studio)
-genai.configure(api_key="AIzaSyAHUyEvBB5X-kiwA88Rl0Gug_GBWaCoSIk") # MINHA CHAVE
+genai.configure(api_key=st.secrets["general"]["api_key"])
+
 # Para ver quais versões são aceitas
 # for m in genai.list_models():
 #   if 'generateContent' in m.supported_generation_methods:
@@ -45,7 +46,20 @@ if botao_recomendar:
                 response = model.generate_content(prompt)
                 st.success("Aqui estão minhas sugestões:")
                 st.markdown("---")
+                #trecho para coletar feedback para o RLHF (Reinforcement Learning from Human Feedback)
                 st.write(response.text)
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button(" Gostei"): 👍
+                        with open("feedback.csv", "a") as f:
+                            f.write(f"{mood},{genero},{tempo},Gostei\n")
+                        st.success("Obrigado pelo seu feedback positivo!")
+                with col2:
+                    if st.button(" Não gostei"): 👎
+                        with open("feedback.csv", "a") as f:
+                            f.write(f"{mood},{genero},{tempo},Não gostei\n")
+                        st.info("Feedback registrado. Vamos melhorar!")
+
             except Exception as e:
                 st.error(f"Erro ao conectar com a IA: {e}")
 
