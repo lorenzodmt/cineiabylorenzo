@@ -45,20 +45,20 @@ if botao_recomendar:
             try:
                 response = model.generate_content(prompt)
                 st.success("Aqui estão minhas sugestões:")
-                st.markdown("---")
-                #trecho para coletar feedback para o RLHF (Reinforcement Learning from Human Feedback)
+                st.markdown("---")                
                 st.write(response.text)
+                #trecho para coletar feedback para o RLHF (Reinforcement Learning from Human Feedback)
                 col1, col2 = st.columns(2)
-with col1:
- if st.button("👍 Gostei"): 
- with open("feedback.csv", "a") as f:
- f.write(f"{mood},{genero},{tempo},Gostei\n")
- st.success("Obrigado pelo seu feedback positivo!")
-with col2:
- if st.button("👎 Não gostei"): 
- with open("feedback.csv", "a") as f:
- f.write(f"{mood},{genero},{tempo},Não gostei\n")
- st.info("Feedback registrado. Vamos melhorar!")
+                    with col1:
+                        if st.button("👍 Gostei"): 
+                            with open("feedback.csv", "a") as f:
+                                f.write(f"{mood},{genero},{tempo},Gostei\n")
+                            st.success("Obrigado pelo seu feedback positivo!")
+                    with col2:
+                        if st.button("👎 Não gostei"): 
+                            with open("feedback.csv", "a") as f:
+                                f.write(f"{mood},{genero},{tempo},Não gostei\n")
+                            st.info("Feedback registrado. Vamos melhorar!")
 
             except Exception as e:
                 st.error(f"Erro ao conectar com a IA: {e}")
